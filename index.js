@@ -27,7 +27,7 @@ bot.hears('stats', (ctx) => {
             console.log('Status:', res.statusCode);
         } else {
             // data is already parsed as JSON:
-            console.log(data.html_url);
+            console.log(data);
             return ctx.reply(JSON.stringify(data));
         }
     });
