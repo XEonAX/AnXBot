@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "express": "^4.16.4",
+    "request": "^2.88.0",
     "telegraf": "^3.27.0"
   },
   "devDependencies": {},
