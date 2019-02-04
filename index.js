@@ -28,16 +28,17 @@ bot.hears('stats', (ctx) => {
         } else {
             // data is already parsed as JSON:
             console.log(data.length);
-            var msg = '';
             data.forEach(function (release) {
+                var msg = '';
                 msg += "Name:" + release.name + "\r\n";
                 msg += "tag_name:" + release.tag_name + "\r\n";
                 release.assets.forEach(function (asset) {
                     msg += "\tAName:" + asset.name + "\r\n";
                     msg += "\tACount:" + asset.download_count + "\r\n";
                 });
+                ctx.reply(msg);
             });
-            return ctx.reply(msg);
+            return;
         }
     });
 
