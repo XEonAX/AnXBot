@@ -14,7 +14,7 @@ bot.hears('hi', (ctx) => ctx.reply('Hey there'));
 var url = 'https://api.github.com/repos/xeonax/ANXCamera10/releases';
 
 bot.hears('stats', (ctx) => {
-    request.get({
+    return request.get({
         url: url,
         json: true,
         headers: {
@@ -28,7 +28,7 @@ bot.hears('stats', (ctx) => {
         } else {
             // data is already parsed as JSON:
             console.log(data.html_url);
-            ctx.reply(JSON.stringify(data));
+            return ctx.reply(JSON.stringify(data));
         }
     });
 
