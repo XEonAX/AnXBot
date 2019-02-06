@@ -13,7 +13,7 @@ bot.hears('hi', (ctx) => ctx.reply('Hey there'));
 
 var url = 'https://api.github.com/repos/xeonax/ANXCamera10/releases';
 
-bot.hears('stats', (ctx) => {
+bot.command('anxstats', (ctx) => {
     return request.get({
         url: url,
         json: true,
@@ -28,27 +28,35 @@ bot.hears('stats', (ctx) => {
         } else {
             // data is already parsed as JSON:
             console.log(data.length);
+            var msg = '';
+            var totaldownloads=0;
             data.forEach(function (release) {
-                var msg = '';
-                msg += "Name:" + release.name + "\r\n";
-                msg += "tag_name:" + release.tag_name + "\r\n";
+                // msg += "Name:" + release.name + "\r\n";
+                // msg += "tag_name:" + release.tag_name + "\r\n";
                 release.assets.forEach(function (asset) {
-                    msg += "\tAName:" + asset.name + "\r\n";
-                    msg += "\tACount:" + asset.download_count + "\r\n";
+                    msg += "["+release.name + "](" + asset.browser_download_url + ") [";
+                    msg += asset.download_count + "]\r\n";
+                    totaldownloads+=asset.download_count;
                 });
-                ctx.reply(msg);
             });
+            console.log('replyWithMarkdown');
+            msg+="Total Downloads:" + totaldownloads;
+            ctx.replyWithMarkdown(msg);
             return;
         }
     });
 
 });
 
+if (process.env.NODE_ENV == 'production') {
+    bot.telegram.setWebhook('ht' + 'tps://anx' + 'bot.heroku' + 'app.com/sec' + 'ret-path');
 
-bot.telegram.setWebhook('ht' + 'tps://anx' + 'bot.heroku' + 'app.com/sec' + 'ret-path');
+    const app = express();
+    app.use(bot.webhookCallback('/sec' + 'ret-path'));
+    app.listen(PORT, () => {
+        console.log('Example app listening on port ' + PORT + '!');
+    });
 
-const app = express();
-app.use(bot.webhookCallback('/sec' + 'ret-path'));
-app.listen(PORT, () => {
-    console.log('Example app listening on port ' + PORT + '!');
-});
+} else {
+    bot.launch();
+}
