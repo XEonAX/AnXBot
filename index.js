@@ -29,18 +29,18 @@ bot.command('anxstats', (ctx) => {
             // data is already parsed as JSON:
             console.log(data.length);
             var msg = '';
-            var totaldownloads=0;
+            var totaldownloads = 0;
             data.forEach(function (release) {
                 // msg += "Name:" + release.name + "\r\n";
                 // msg += "tag_name:" + release.tag_name + "\r\n";
                 release.assets.forEach(function (asset) {
-                    msg += "["+release.name + "](" + asset.browser_download_url + ") [";
+                    msg += "[" + release.name + "](" + asset.browser_download_url + ") [";
                     msg += asset.download_count + "]\r\n";
-                    totaldownloads+=asset.download_count;
+                    totaldownloads += asset.download_count;
                 });
             });
             console.log('replyWithMarkdown');
-            msg+="Total Downloads:" + totaldownloads;
+            msg += "Total Downloads:" + totaldownloads;
             ctx.replyWithMarkdown(msg);
             return;
         }
@@ -65,19 +65,19 @@ bot.command('anxping', (ctx) => {
             // data is already parsed as JSON:
             console.log(data.length);
             var msg = '';
-            var totaldownloads=0;
+            var totaldownloads = 0;
             data.forEach(function (release) {
-                // msg += "Name:" + release.name + "\r\n";
+                msg += release.name + ":\r\n";
                 // msg += "tag_name:" + release.tag_name + "\r\n";
                 release.assets.forEach(function (asset) {
-                    msg += "["+release.name + "](" + asset.browser_download_url + ") [";
+                    msg += "[" + asset.name + "](" + asset.browser_download_url + ") [";
                     msg += asset.download_count + "]\r\n";
-                    totaldownloads+=asset.download_count;
+                    totaldownloads += asset.download_count;
                 });
             });
             console.log('replyWithMarkdown');
-            msg+="Total Downloads:" + totaldownloads;
-            oldmsg=msg;
+            msg += "Total Downloads:" + totaldownloads;
+            oldmsg = msg;
             return;
         }
     });
@@ -85,6 +85,7 @@ bot.command('anxping', (ctx) => {
 });
 
 bot.command('anxpong', (ctx) => ctx.replyWithMarkdown(oldmsg));
+bot.command('anxpung', (ctx) => ctx.reply(oldmsg));
 
 if (process.env.NODE_ENV == 'production') {
     bot.telegram.setWebhook('ht' + 'tps://anx' + 'bot.heroku' + 'app.com/sec' + 'ret-path');
