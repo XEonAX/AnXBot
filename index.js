@@ -1,7 +1,7 @@
 'use strict';
 const Telegraf = require('telegraf');
 const express = require('express');
-const request = require('request');
+const request = require('request-promise');
 
 const PORT = process.env.PORT || 5000;
 const bot = new Telegraf(process.env.BOT_TOKEN);
@@ -14,38 +14,33 @@ bot.hears('hi', (ctx) => ctx.reply('Hey there'));
 var url = 'https://api.github.com/repos/xeonax/ANXCamera10/releases';
 var oldmsg = '';
 bot.command('anxstats', (ctx) => {
-    return request.get({
+    return ctx.replyWithHTML("Gettings stat").then(() => request({
         url: url,
         json: true,
         headers: {
             'User-Agent': 'AnxBot'
         }
-    }, (err, res, data) => {
-        if (err) {
-            console.log('Error:', err);
-        } else if (res.statusCode !== 200) {
-            console.log('Status:', res.statusCode);
-        } else {
-            // data is already parsed as JSON:
-            console.log(data.length);
-            var msg = '';
-            var totaldownloads = 0;
-            data.forEach(function (release) {
-                // msg += "Name:" + release.name + "\r\n";
-                // msg += "tag_name:" + release.tag_name + "\r\n";
-                release.assets.forEach(function (asset) {
-                    msg += "[" + release.name + "](" + asset.browser_download_url + ") [";
-                    msg += asset.download_count + "]\r\n";
-                    totaldownloads += asset.download_count;
-                });
+    }).then((data) => {
+        // data is already parsed as JSON:
+        console.log(data.length);
+        var msg = '';
+        var totaldownloads = 0;
+        data.forEach(function (release) {
+            // msg += "Name:" + release.name + "\r\n";
+            // msg += "tag_name:" + release.tag_name + "\r\n";
+            release.assets.forEach((asset) => {
+                msg += "[" + release.name + "](" + asset.browser_download_url + ") [";
+                msg += asset.download_count + "]\r\n";
+                totaldownloads += asset.download_count;
             });
-            console.log('replyWithMarkdown');
-            msg += "Total Downloads:" + totaldownloads;
-            ctx.replyWithMarkdown(msg);
-            return;
-        }
-    });
-
+        });
+        console.log('replyWithMarkdown');
+        msg += "Total Downloads:" + totaldownloads;
+        msg += "\r\n/anxstats";
+        return ctx.replyWithMarkdown(msg);
+    }).catch((err) => {
+        return ctx.reply("/anxstats failed");
+    }));
 });
 
 
