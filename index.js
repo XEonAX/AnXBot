@@ -13,8 +13,8 @@ bot.hears('hi', (ctx) => ctx.reply('Hey there'));
 
 var url = 'https://api.github.com/repos/xeonax/ANXCamera10/releases';
 var oldmsg = '';
-bot.command('anxstats', (ctx) => {
-    return ctx.replyWithHTML("Gettings stat").then(() => request({
+bot.command('anxtagstats', (ctx) => {
+    return ctx.replyWithHTML("Gettings tag stats").then(() => request({
         url: url,
         json: true,
         headers: {
@@ -30,6 +30,36 @@ bot.command('anxstats', (ctx) => {
             // msg += "tag_name:" + release.tag_name + "\r\n";
             release.assets.forEach((asset) => {
                 msg += "[" + release.name + "](" + asset.browser_download_url + ") [";
+                msg += asset.download_count + "]\r\n";
+                totaldownloads += asset.download_count;
+            });
+        });
+        console.log('replyWithMarkdown');
+        msg += "Total Downloads:" + totaldownloads;
+        msg += "\r\n/anxstats";
+        return ctx.replyWithMarkdown(msg);
+    }).catch((err) => {
+        return ctx.reply("/anxtagstats failed");
+    }));
+});
+
+bot.command('anxstats', (ctx) => {
+    return ctx.replyWithHTML("Gettings stat").then(() => request({
+        url: url,
+        json: true,
+        headers: {
+            'User-Agent': 'AnxBot'
+        }
+    }).then((data) => {
+        // data is already parsed as JSON:
+        console.log(data.length);
+        var msg = '';
+        var totaldownloads = 0;
+        data.forEach(function (release) {
+            msg += release.name + ":\r\n";
+            // msg += "tag_name:" + release.tag_name + "\r\n";
+            release.assets.forEach(function (asset) {
+                msg += "[" + asset.name + "](" + asset.browser_download_url + ") [";
                 msg += asset.download_count + "]\r\n";
                 totaldownloads += asset.download_count;
             });
