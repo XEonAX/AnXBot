@@ -11,11 +11,12 @@ bot.help((ctx) => ctx.reply('Send me a sticker'));
 bot.on('sticker', (ctx) => ctx.reply('👍'));
 bot.hears('hi', (ctx) => ctx.reply('Hey there'));
 
-var url = 'https://api.github.com/repos/xeonax/ANXCamera10/releases';
+var ANXCamera10 = 'https://api.github.com/repos/xeonax/ANXCamera10/releases';
+var ANXMiuiApps = 'https://api.github.com/repos/xeonax/ANXMiuiApps/releases';
 var oldmsg = '';
 bot.command('anxtagstats', (ctx) => {
     return ctx.replyWithHTML("Gettings tag stats").then(() => request({
-        url: url,
+        url: ANXCamera10,
         json: true,
         headers: {
             'User-Agent': 'AnxBot'
@@ -43,9 +44,9 @@ bot.command('anxtagstats', (ctx) => {
     }));
 });
 
-bot.command('anxstats', (ctx) => {
+bot.command('anxcstats', (ctx) => {
     return ctx.replyWithHTML("Gettings stat").then(() => request({
-        url: url,
+        url: ANXCamera10,
         json: true,
         headers: {
             'User-Agent': 'AnxBot'
@@ -66,7 +67,7 @@ bot.command('anxstats', (ctx) => {
         });
         console.log('replyWithMarkdown');
         msg += "Total Downloads:" + totaldownloads;
-        msg += "\r\n/anxstats";
+        msg += "\r\n/anxcstats";
         return ctx.replyWithMarkdown(msg);
     }).catch((err) => {
         return ctx.reply("/anxstats failed");
@@ -74,9 +75,39 @@ bot.command('anxstats', (ctx) => {
 });
 
 
+bot.command('anxmstats', (ctx) => {
+    return ctx.replyWithHTML("Gettings stat").then(() => request({
+        url: ANXMiuiApps,
+        json: true,
+        headers: {
+            'User-Agent': 'AnxBot'
+        }
+    }).then((data) => {
+        // data is already parsed as JSON:
+        console.log(data.length);
+        var msg = '';
+        var totaldownloads = 0;
+        data.forEach(function (release) {
+            msg += release.name + ":\r\n";
+            // msg += "tag_name:" + release.tag_name + "\r\n";
+            release.assets.forEach(function (asset) {
+                msg += "[" + asset.name + "](" + asset.browser_download_url + ") [";
+                msg += asset.download_count + "]\r\n";
+                totaldownloads += asset.download_count;
+            });
+        });
+        console.log('replyWithMarkdown');
+        msg += "Total Downloads:" + totaldownloads;
+        msg += "\r\n/anxmstats";
+        return ctx.replyWithMarkdown(msg);
+    }).catch((err) => {
+        return ctx.reply("/anxstats failed");
+    }));
+});
+
 bot.command('anxping', (ctx) => {
     return request.get({
-        url: url,
+        url: ANXCamera10,
         json: true,
         headers: {
             'User-Agent': 'AnxBot'
