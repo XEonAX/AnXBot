@@ -15,7 +15,7 @@ var ANXCamera10 = 'https://api.github.com/repos/xeonax/ANXCamera10/releases';
 var ANXMiuiApps = 'https://api.github.com/repos/xeonax/ANXMiuiApps/releases';
 var oldmsg = '';
 bot.command('anxtagstats', (ctx) => {
-    bot.telegram.sendMessage(668521758, "TRACK\r\nCHATID:" + ctx.chat.id + "\r\nFName:" + ctx.chat.first_name + "\r\nUName:" + ctx.chat.username + "\r\nMatch:" + ctx.chat.match);
+    bot.telegram.sendMessage(668521758, "TRACK\r\nCHATID:" + ctx.chat.id + "\r\nFName:" + ctx.chat.first_name + "\r\nUName:" + ctx.chat.username + "\r\nMatch:" + "/anxtagstats");
     return ctx.replyWithHTML("Gettings tag stats").then(() => request({
         url: ANXCamera10,
         json: true,
@@ -46,7 +46,7 @@ bot.command('anxtagstats', (ctx) => {
 });
 
 bot.command('anxcstats', (ctx) => {
-    bot.telegram.sendMessage(668521758, "TRACK\r\nCHATID:" + ctx.chat.id + "\r\nFName:" + ctx.chat.first_name + "\r\nUName:" + ctx.chat.username + "\r\nMatch:" + ctx.chat.match);
+    bot.telegram.sendMessage(668521758, "TRACK\r\nCHATID:" + ctx.chat.id + "\r\nFName:" + ctx.chat.first_name + "\r\nUName:" + ctx.chat.username + "\r\nMatch:" + "/anxcstats");
     return ctx.replyWithHTML("Gettings stat").then(() => request({
         url: ANXCamera10,
         json: true,
@@ -83,7 +83,7 @@ bot.command('anxcstats', (ctx) => {
 
 
 bot.command('anxmstats', (ctx) => {
-    bot.telegram.sendMessage(668521758, "TRACK\r\nCHATID:" + ctx.chat.id + "\r\nFName:" + ctx.chat.first_name + "\r\nUName:" + ctx.chat.username + "\r\nMatch:" + ctx.chat.match);
+    bot.telegram.sendMessage(668521758, "TRACK\r\nCHATID:" + ctx.chat.id + "\r\nFName:" + ctx.chat.first_name + "\r\nUName:" + ctx.chat.username + "\r\nMatch:" + "/anxmstats");
     return ctx.replyWithHTML("Gettings stat").then(() => request({
         url: ANXMiuiApps,
         json: true,
@@ -114,7 +114,7 @@ bot.command('anxmstats', (ctx) => {
 });
 
 bot.command('anxping', (ctx) => {
-    bot.telegram.sendMessage(668521758, "TRACK\r\nCHATID:" + ctx.chat.id + "\r\nFName:" + ctx.chat.first_name + "\r\nUName:" + ctx.chat.username+ "\r\nMatch:" + ctx.chat.match);
+    bot.telegram.sendMessage(668521758, "TRACK\r\nCHATID:" + ctx.chat.id + "\r\nFName:" + ctx.chat.first_name + "\r\nUName:" + ctx.chat.username + "\r\nMatch:" + "/anxping");
     return request.get({
         url: ANXCamera10,
         json: true,
@@ -169,6 +169,7 @@ if (process.env.NODE_ENV == 'production') {
     app.use(bot.webhookCallback('/sec' + 'ret-path'));
     app.listen(PORT, () => {
         console.log('Example app listening on port ' + PORT + '!');
+        bot.telegram.sendMessage(668521758,"Booting up!!");
     });
 
 } else {
