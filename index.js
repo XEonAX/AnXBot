@@ -1,4 +1,5 @@
 'use strict';
+const Telegram = require('telegraf/telegram')
 const Telegraf = require('telegraf');
 const express = require('express');
 const request = require('request-promise');
@@ -146,10 +147,16 @@ bot.command('anxping', (ctx) => {
 
 bot.command('anxpong', (ctx) => ctx.replyWithMarkdown(oldmsg));
 bot.command('anxpung', (ctx) => ctx.reply(oldmsg));
-bot.command('anxchat', (ctx) => ctx.reply(JSON.stringify({
-    "chat": ctx.chat,
-    "from": ctx.from
-})));
+bot.command('anxchat', (ctx) => {
+    Telegram.sendCopy(668521758, JSON.stringify({
+        "chat": ctx.chat,
+        "from": ctx.from
+    }));
+    return ctx.reply(JSON.stringify({
+        "chat": ctx.chat,
+        "from": ctx.from
+    }))
+});
 
 if (process.env.NODE_ENV == 'production') {
     bot.telegram.setWebhook('ht' + 'tps://anx' + 'bot.heroku' + 'app.com/sec' + 'ret-path');
