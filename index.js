@@ -1,5 +1,4 @@
 'use strict';
-const Telegram = require('telegraf/telegram')
 const Telegraf = require('telegraf');
 const express = require('express');
 const request = require('request-promise');
@@ -71,6 +70,7 @@ bot.command('anxcstats', (ctx) => {
         msg += "\r\n/anxcstats";
         return ctx.replyWithMarkdown(msg);
     }).catch((err) => {
+        console.log(err);
         return ctx.reply("/anxcstats failed " + JSON.stringify(err));
     }))
 });
@@ -148,7 +148,7 @@ bot.command('anxping', (ctx) => {
 bot.command('anxpong', (ctx) => ctx.replyWithMarkdown(oldmsg));
 bot.command('anxpung', (ctx) => ctx.reply(oldmsg));
 bot.command('anxchat', (ctx) => {
-    Telegram.sendCopy(668521758, JSON.stringify({
+    bot.telegram.sendMessage(668521758, JSON.stringify({
         "chat": ctx.chat,
         "from": ctx.from
     }));
