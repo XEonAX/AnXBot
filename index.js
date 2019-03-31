@@ -70,8 +70,8 @@ bot.command('anxcstats', (ctx) => {
         msg += "\r\n/anxcstats";
         return ctx.replyWithMarkdown(msg);
     }).catch((err) => {
-        return ctx.reply("/anxstats failed");
-    }));
+        return ctx.reply("/anxcstats failed " + JSON.stringify(err));
+    }))
 });
 
 
