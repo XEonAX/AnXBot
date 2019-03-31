@@ -88,11 +88,15 @@ bot.command('anxmstats', (ctx) => {
         var msg = '';
         var totaldownloads = 0;
         data.forEach(function (release) {
-            msg += release.name + ":\r\n";
+            var releasesplit = release.name.split(".");
+            if (releasesplit[0] == 'singularity' || releasesplit[0] == 'oosberyllium')
+                msg += release.name + ":\r\n";
             // msg += "tag_name:" + release.tag_name + "\r\n";
             release.assets.forEach(function (asset) {
-                msg += "[" + asset.name + "](" + asset.browser_download_url + ") [";
-                msg += asset.download_count + "]\r\n";
+                if (releasesplit[0] == 'singularity' || releasesplit[0] == 'oosberyllium') {
+                    msg += "[" + asset.name + "](" + asset.browser_download_url + ") [";
+                    msg += asset.download_count + "]\r\n";
+                }
                 totaldownloads += asset.download_count;
             });
         });
@@ -142,6 +146,10 @@ bot.command('anxping', (ctx) => {
 
 bot.command('anxpong', (ctx) => ctx.replyWithMarkdown(oldmsg));
 bot.command('anxpung', (ctx) => ctx.reply(oldmsg));
+bot.command('anxchat', (ctx) => ctx.reply(JSON.stringify({
+    "chat": ctx.chat,
+    "from": ctx.from
+})));
 
 if (process.env.NODE_ENV == 'production') {
     bot.telegram.setWebhook('ht' + 'tps://anx' + 'bot.heroku' + 'app.com/sec' + 'ret-path');
